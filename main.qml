@@ -302,10 +302,7 @@ Window {
                 anchors.leftMargin: 304
                 anchors.topMargin: 0
                 onClicked: {
-                    console.debug("dfdf")
-                    //FrameStream.openVideoCamera("/home/landgrafpc/Видео/video/Проект по-умолчанию.mp4")
-                    //FrameStream.openVideoCamera("/home/landgrafpc/Видео/video/out.mp4")
-                    FrameStream.openVideoCamera("/home/landgrafpc/Видео/video/out.mp4")
+                    FrameStream.openVideoCamera("/home/user/Видео/video/out.mp4")
                 }
             }
 

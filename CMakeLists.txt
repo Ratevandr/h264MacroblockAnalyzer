@@ -34,53 +34,53 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 find_path(AVCODEC_INCLUDE_DIR libavcodec/avcodec.h
 
-    /home/landgrafpc/programming/ffmpeg/FFmpeg/install/build/incdir/)
+    /home/user/programming/ffmpeg/FFmpeg/install/build/incdir/)
 find_library(AVCODEC_LIBRARY
     NAMES avcodec
     NO_DEFAULT_PATH
     PATHS
-    /home/landgrafpc/programming/ffmpeg/FFmpeg/install/build/shlibdir/
+    /home/user/programming/ffmpeg/FFmpeg/install/build/shlibdir/
     )
 
 find_path(AVFORMAT_INCLUDE_DIR libavformat/avformat.h
-     /home/landgrafpc/programming/ffmpeg/FFmpeg/install/build/incdir/)
+     /home/user/programming/ffmpeg/FFmpeg/install/build/incdir/)
 find_library(AVFORMAT_LIBRARY
     NAMES avformat
     NO_DEFAULT_PATH
     PATHS
-    /home/landgrafpc/programming/ffmpeg/FFmpeg/install/build/shlibdir/)
+    /home/user/programming/ffmpeg/FFmpeg/install/build/shlibdir/)
 
 find_path(AVUTIL_INCLUDE_DIR libavutil/avutil.h
-    /home/landgrafpc/programming/ffmpeg/FFmpeg/install/build/incdir/)
+    /home/user/programming/ffmpeg/FFmpeg/install/build/incdir/)
 find_library(AVUTIL_LIBRARY
     NAMES avutil
     NO_DEFAULT_PATH
     PATHS
-    /home/landgrafpc/programming/ffmpeg/FFmpeg/install/build/shlibdir/)
+    /home/user/programming/ffmpeg/FFmpeg/install/build/shlibdir/)
 
 find_path(AVDEVICE_INCLUDE_DIR libavdevice/avdevice.h
-    /home/landgrafpc/programming/ffmpeg/FFmpeg/install/build/incdir/)
+    /home/user/programming/ffmpeg/FFmpeg/install/build/incdir/)
 find_library(AVDEVICE_LIBRARY
     NAMES avdevice
     NO_DEFAULT_PATH
     PATHS
-    /home/landgrafpc/programming/ffmpeg/FFmpeg/install/build/shlibdir/)
+    /home/user/programming/ffmpeg/FFmpeg/install/build/shlibdir/)
 
 find_path(SWRESAMPLE_INCLUDE_DIR libswresample/swresample.h
-    /home/landgrafpc/programming/ffmpeg/FFmpeg/install/build/incdir/libswresample/)
+    /home/user/programming/ffmpeg/FFmpeg/install/build/incdir/libswresample/)
 find_library(SWRESAMPLE_LIBRARY
     NAMES swresample
     NO_DEFAULT_PATH
     PATHS
-    /home/landgrafpc/programming/ffmpeg/FFmpeg/install/build/shlibdir/)
+    /home/user/programming/ffmpeg/FFmpeg/install/build/shlibdir/)
 
 find_path(SWSCALE_INCLUDE_DIR libswscale/swscale.h
-    /home/landgrafpc/programming/ffmpeg/FFmpeg/install/build/incdir/libswscale/)
+    /home/user/programming/ffmpeg/FFmpeg/install/build/incdir/libswscale/)
 find_library(SWSCALE_LIBRARY
     NAMES swscale
     NO_DEFAULT_PATH
     PATHS
-    /home/landgrafpc/programming/ffmpeg/FFmpeg/install/build/shlibdir/)
+    /home/user/programming/ffmpeg/FFmpeg/install/build/shlibdir/)
 
 
 #find_path(AVCODEC_INCLUDE_DIR libavcodec/avcodec.h)
