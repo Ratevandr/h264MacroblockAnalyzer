@@ -107,14 +107,11 @@ private :
 
     cv::Mat _tmpImg;
 
-    // double r2d(AVRational r) const ;
     double _fps = -1;
     double getFps() const;
     double  eps_zero = 0.000025;
 
     std::vector<MbInfo> _curFrameMbInfo;
-
-
 
 signals:
     void newImage(QImage &);
@@ -122,9 +119,6 @@ signals:
     void initSlider(int maxFrameCount);
     void updateTextView(QString mbInfo);
     void updateFrameTypeInfo(QString frameTypeInfo);
-
-
-
 
 };
 

@@ -24,8 +24,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick LinguistTools REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick LinguistTools REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick Widgets LinguistTools REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick Widgets LinguistTools REQUIRED)
 
 find_package(OpenCV REQUIRED core highgui imgproc)
 include_directories( ${OpenCV_INCLUDE_DIRS} )
@@ -161,6 +161,7 @@ target_link_libraries(MacroblockAnalyzer
   PRIVATE
   Qt${QT_VERSION_MAJOR}::Core
   Qt${QT_VERSION_MAJOR}::Quick
+  Qt${QT_VERSION_MAJOR}::Widgets
   ${OpenCV_LIBS}
   ${AVCODEC_LIBRARY}
   ${AVFORMAT_LIBRARY}

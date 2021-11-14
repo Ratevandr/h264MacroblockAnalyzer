@@ -4,6 +4,9 @@
 #include "opencvimageprovider.hpp"
 #include <memory>
 #include <QQmlContext>
+#include <QtWidgets/QApplication>
+
+
 
 int main(int argc, char *argv[])
 {
@@ -11,7 +14,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
+
     FrameStream frameStream;
     opencvImageProvider *cvImageProv= new opencvImageProvider();
 

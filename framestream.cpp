@@ -68,7 +68,7 @@ void FrameStream::selectMacroblock(qint32 x, qint32 y) {
                         QImage::Format_RGB888
                         ).rgbSwapped();
 
-    MbInfo& info = _curFrameMbInfo[xPos + (yPos ) * _macroblockPerLine];
+    MbInfo& info = _curFrameMbInfo[xPos + (yPos) * _macroblockPerLine];
     QString curMbInfoString;
     QString binStr = QString("%1").arg(info.mbType, 32, 2, QChar('0'));;// QString::number(info.num,2);
     QTextStream(&curMbInfoString) << "Pos " << xPos << " " << yPos << "\n" <<
@@ -99,9 +99,6 @@ void FrameStream::selectMacroblock(qint32 x, qint32 y) {
 }
 
 void FrameStream::ffmpegInit() {
-
-
-
     _formatContext = std::shared_ptr<AVFormatContext>(avformat_alloc_context(), [](AVFormatContext *avf) {
         avformat_free_context(avf);
     });
@@ -120,31 +117,20 @@ void FrameStream::drawMacroblockGrid(cv::Mat& frame, std::shared_ptr<AVFrame> av
     auto avFramePtr = avFrame.get();
 
     std::vector<std::pair<cv::Point, cv::Point> > mbCoordArray;
-    //std::vector<std::pair<cv::Point, cv::Point> > ;
-
 
     for (int i = 0; i < allMacroblockCount; ++i) {
         int row = i / _macroblockPerLine;
 
-
         int col = i % (_macroblockPerLine);
-
-
-        //  int* mbTable =  (int*)avFramePtr->qscale_table[i];
 
         uint32_t   *mb_type_array = (uint32_t *)avFramePtr->opaque;
         uint32_t    mbType = mb_type_array[i];
         std::string kek = std::to_string(avFramePtr->qscale_table[i]);
 
-
-        //
-
-
         MbInfo info;
         info.mbType = mbType;
         info.num = avFramePtr->qscale_table[i];
 
-        // int mbType = avFramePtr->qscale_table[i]; // convert for work
         // with ffmpeg predefined macros
         if (IS_INTRA4x4(mbType)) {
             info.isIntra4x4 = true;
@@ -152,7 +138,6 @@ void FrameStream::drawMacroblockGrid(cv::Mat& frame, std::shared_ptr<AVFrame> av
 
         if (IS_INTRA16x16(mbType)) {
             info.isIntra16x16 = true;
-
         }
 
         if (IS_PCM(mbType)) {
@@ -225,49 +210,49 @@ void FrameStream::drawMacroblockGrid(cv::Mat& frame, std::shared_ptr<AVFrame> av
                       cv::Point(col * mbSize + mbSize, (mbSize) * row + mbSize),
                       cv::Vec3i(125, 125, 0));
         int font = cv::FONT_HERSHEY_SIMPLEX;
-        cv::putText(frame, kek, cv::Point(col * mbSize + 2, mbSize * row+mbSize - 4), font, 0.3,
+        cv::putText(frame, kek, cv::Point(col * mbSize + 2, mbSize * row + mbSize - 4), font, 0.3,
                     cv::Vec3i(0, 255, 0), 1);
 
 
         _curFrameMbInfo.push_back(info);
     }
 
-    manyTransparrentRectangle(frame,mbCoordArray,cv::Vec3i(0, 255, 255));
+    manyTransparrentRectangle(frame, mbCoordArray, cv::Vec3i(0, 255, 255));
 }
 
 void FrameStream::avFrameToCVmatWithConvert(cv::Mat& destFrame) {
+    int width = _frame->width;
+    int height = _frame->height;
 
-        int width = _frame->width;
-        int height = _frame->height;
+    assert(destFrame.rows == height && destFrame.cols == width && destFrame.type() == CV_8UC3);
 
-        assert(destFrame.rows == height && destFrame.cols == width && destFrame.type() == CV_8UC3);
+    int cvLinesizes[1];
 
-        int cvLinesizes[1];
-        /*
-            image.step1() = (width of a single matrix row in bytes) / (element size in bytes)
-            width of a single matrix row in bytes = image.step1() * element size in bytes
-        */
-        cvLinesizes[0] = static_cast<int>(destFrame.step1());
+    /*
+        image.step1() = (width of a single matrix row in bytes) / (element
+           size in bytes)
+        width of a single matrix row in bytes = image.step1() * element size
+           in bytes
+     */
+    cvLinesizes[0] = static_cast<int>(destFrame.step1());
 
-        // Convert the colour format and write directly to the opencv matrix
-        SwsContext* conversion = sws_getContext(width,
-                                                height,
-                                                static_cast<AVPixelFormat>(_frame->format),
-                                                width,
-                                                height,
-                                                AV_PIX_FMT_BGR24,
-                                                SWS_FAST_BILINEAR,
-                                                nullptr,
-                                                nullptr,
-                                                nullptr);
-        sws_scale(conversion, _frame->data, _frame->linesize, 0, height, &destFrame.data, cvLinesizes);
-        sws_freeContext(conversion);
-
+    // Convert the colour format and write directly to the opencv matrix
+    SwsContext *conversion = sws_getContext(width,
+                                            height,
+                                            static_cast<AVPixelFormat>(_frame->format),
+                                            width,
+                                            height,
+                                            AV_PIX_FMT_BGR24,
+                                            SWS_FAST_BILINEAR,
+                                            nullptr,
+                                            nullptr,
+                                            nullptr);
+    sws_scale(conversion, _frame->data, _frame->linesize, 0, height, &destFrame.data, cvLinesizes);
+    sws_freeContext(conversion);
 }
 
 void FrameStream::avFrameToCVmat(cv::Mat& destFrame) {
-    if (_frame->format == AV_PIX_FMT_YUV420P) { //64
-
+    if (_frame->format == AV_PIX_FMT_YUV420P) {// 64
         int width = _frame->width;
         int height = _frame->height;
 
@@ -301,7 +286,7 @@ void FrameStream::avFrameToCVmat(cv::Mat& destFrame) {
         }
 
         av_free(buffer);
-    } else if (_frame->format==AV_PIX_FMT_YUV420P10LE) {
+    } else if (_frame->format == AV_PIX_FMT_YUV420P10LE) {
         int width = _frame->width;
         int height = _frame->height;
 
@@ -335,14 +320,12 @@ void FrameStream::avFrameToCVmat(cv::Mat& destFrame) {
         }
 
         av_free(buffer);
-
-
     } else {
         destFrame = cv::Mat(_frame->height, _frame->width, CV_8UC3);
 
         if (_frame->width * _frame->height > 0) {
             avFrameToCVmatWithConvert(destFrame);
-             drawMacroblockGrid(destFrame, _frame);
+            drawMacroblockGrid(destFrame, _frame);
             _tmpImg = destFrame.clone();
         }
     }
@@ -484,14 +467,6 @@ void FrameStream::seekToFrame(qint64 frame)
         avcodec_flush_buffers(pCodecContext);
     }
 
-    //    if (av_seek_frame(formatContextPtr,videoStreamIdx, frame*1000,
-    // AVSEEK_FLAG_BACKWARD) < 0) {
-    //        av_log(NULL, AV_LOG_ERROR, "ERROR av_seek_frame: %lld\n",
-    // frame);
-    //    } else {
-    //        avcodec_flush_buffers(pCodecContext);
-    //    }
-
     while (frame != _frameNum) {
         getNextFrame();
         qDebug() << frame << _frameNum;
@@ -499,9 +474,6 @@ void FrameStream::seekToFrame(qint64 frame)
 }
 
 void FrameStream::openVideoCamera(QString path) {
-    qDebug() << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-    int kek =  AVERROR_EOF;
-    int mek = AVERROR(EAGAIN);
     std::string filePath = path.toStdString();
 
     auto formatContextPtr = _formatContext.get();
@@ -510,18 +482,15 @@ void FrameStream::openVideoCamera(QString path) {
 
     qDebug() << ret;
     char err[1024] = { 0 };
-    int  nRet = av_strerror(ret, err, 1024);
+    av_strerror(ret, err, 1024);
     qDebug() << err;
 
     if (avformat_find_stream_info(formatContextPtr, nullptr) < 0) {
-           qDebug() <<"ERROR";
-
-       }
+        qDebug() << "Error find stream info";
+    }
 
     for (size_t i = 0; i < _formatContext->nb_streams; ++i) {
         AVCodecParameters *streamParameters = _formatContext->streams[i]->codecpar;
-
-        // AVCodec *codec = avcodec_find_decoder(AV_CODEC_ID_H264);
 
         AVCodec *codec = avcodec_find_decoder(streamParameters->codec_id);
 
@@ -530,7 +499,7 @@ void FrameStream::openVideoCamera(QString path) {
             _fps = getFps();
 
             double durationSec = getDurationSec();
-            qDebug() << "fps: " << _fps << " duration: " << durationSec;
+            qDebug() << "Fps: " << _fps << " duration: " << durationSec;
 
             videoStreamIdx = i;
             _codecContext =
@@ -541,7 +510,7 @@ void FrameStream::openVideoCamera(QString path) {
             auto pCodecContext = _codecContext.get();
 
             if (avcodec_parameters_to_context(pCodecContext, streamParameters) < 0) {
-                qDebug() << "ERROR COPY DECODER CONTEXT";
+                qDebug() << "Error copy decoder context";
             }
 
             avcodec_open2(pCodecContext, codec, nullptr);
@@ -561,8 +530,7 @@ void FrameStream::openVideoCamera(QString path) {
     });
 
     _pause = true;
-
-    // tUpdate.start(1000 / _fps);
+    getNextFrame();
 }
 
 void FrameStream::pause() {
